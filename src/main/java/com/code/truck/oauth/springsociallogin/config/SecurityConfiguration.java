@@ -86,25 +86,6 @@ public class SecurityConfiguration {
         };
     }
 
-    /*
-     * @Bean
-     * UserDetailsService inMemoryUsers() {
-     * InMemoryUserDetailsManager users = new InMemoryUserDetailsManager();
-     * 
-     * var bob = new User("bob", passwordEncoder().encode("1234"),
-     * Collections.emptyList());
-     * var bil =
-     * User.builder().username("bil").password(passwordEncoder().encode("321")).
-     * roles("USER")
-     * .authorities("read").build();
-     * 
-     * users.createUser(bob);
-     * users.createUser(bil);
-     * 
-     * return users;
-     * }
-     */
-
     @Bean
     ApplicationListener<AuthenticationSuccessEvent> successLogger() {
         return event -> {

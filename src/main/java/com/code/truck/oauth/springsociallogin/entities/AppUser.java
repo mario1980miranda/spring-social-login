@@ -63,7 +63,7 @@ public class AppUser implements UserDetails, OidcUser {
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override
