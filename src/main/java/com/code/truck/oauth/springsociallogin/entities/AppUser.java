@@ -10,6 +10,8 @@ import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
+import com.code.truck.oauth.springsociallogin.emuns.LoginProvider;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -23,6 +25,8 @@ public class AppUser implements UserDetails, OidcUser {
     String userId;
     String name;
     String imageUrl;
+
+    LoginProvider provider;
 
     Map<String, Object> attributes;
     Collection<? extends GrantedAuthority> authorities;
