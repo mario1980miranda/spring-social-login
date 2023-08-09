@@ -13,6 +13,13 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -26,9 +33,25 @@ public class SecurityConfiguration {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .formLogin(Customizer.withDefaults())
-                .oauth2Login(Customizer.withDefaults())
+                .oauth2Login(oc -> oc.userInfoEndpoint(
+                        ui -> ui.userService(oauth2LoginHandler()).oidcUserService(oidcLoginHandler())))
                 .authorizeHttpRequests(c -> c.anyRequest().authenticated())
                 .build();
+    }
+
+    private OAuth2UserService<OidcUserRequest, OidcUser> oidcLoginHandler() {
+        return userRequest -> {
+            OidcUserService delegate = new OidcUserService();
+            // custom AppUser
+            return delegate.loadUser(userRequest);
+        };
+    }
+
+    private OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2LoginHandler() {
+        return userRequest -> {
+            DefaultOAuth2UserService delegate = new DefaultOAuth2UserService();
+            return delegate.loadUser(userRequest);
+        };
     }
 
     /*
