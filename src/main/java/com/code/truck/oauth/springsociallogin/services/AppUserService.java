@@ -88,16 +88,16 @@ public class AppUserService implements UserDetailsService {
 
         var bob = AppUser
                 .builder()
+                .provider(LoginProvider.APP)
                 .username("bob")
                 .password(passwordEncoder.encode("1234"))
-                .imageUrl("img")
                 .authorities(List.of(new SimpleGrantedAuthority("read")))
                 .build();
         var bil = AppUser
                 .builder()
+                .provider(LoginProvider.APP)
                 .username("bil")
                 .password(passwordEncoder.encode("321"))
-                .imageUrl("img")
                 .authorities(List.of(new SimpleGrantedAuthority("read")))
                 .build();
 
