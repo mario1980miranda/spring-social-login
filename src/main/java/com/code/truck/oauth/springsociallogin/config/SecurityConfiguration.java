@@ -35,6 +35,8 @@ public class SecurityConfiguration {
                         ui -> ui.userService(appUserService.oauth2LoginHandler())
                                 .oidcUserService(appUserService.oidcLoginHandler())))
                 .authorizeHttpRequests(c -> c
+                        .requestMatchers(mvc.pattern("/images/**"), mvc.pattern("/**.css"), mvc.pattern("/**.js"))
+                        .permitAll()
                         .requestMatchers(mvc.pattern("/"), mvc.pattern("/login"), mvc.pattern("/user/sign-up"),
                                 mvc.pattern("/error"))
                         .permitAll()

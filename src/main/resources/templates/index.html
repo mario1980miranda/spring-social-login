@@ -6,13 +6,75 @@
 >
   <head>
     <meta />
-    <title></title>
+    <title>Welcome</title>
   </head>
   <body>
     <div id="home_content">
-      <h1>Welcome</h1>
-      <div sec:authorize="isAuthenticated()">
-        <p sec:authentication="principal"></p>
+      <div class="ui padded segment">
+        <h2 class="ui dividing header">How to build this app</h2>
+        <div class="ui link cards">
+          <div class="card">
+            <div class="image">
+              <img src="/images/spring_social_2_cloud_part_1.jpg" />
+            </div>
+            <div class="content">
+              <div class="header">Deploying spring apps to cloud</div>
+              <div class="meta">
+                <a>part 1</a>
+              </div>
+              <div class="description">
+                Deploying spring web apps to railway.app and heroku cloud
+                provider.
+              </div>
+            </div>
+            <div class="center aligned extra content">
+              <span>
+                <i class="photo video icon"></i>
+              </span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="image">
+              <img
+                src="/images/spring_social_2_cloud_part_2_security_overview.jpg"
+              />
+            </div>
+            <div class="content">
+              <div class="header">Spring security overview</div>
+              <div class="meta">
+                <span class="date">part 2</span>
+              </div>
+              <div class="description">
+                Overview of spring security architecure for spring mvc web apps.
+              </div>
+            </div>
+            <div class="center aligned extra content">
+              <span>
+                <i class="photo video icon"></i>
+              </span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="image">
+              <img src="/images/spring_social_2_cloud_part_3_oauth2.jpg" />
+            </div>
+            <div class="content">
+              <div class="header">OAuth2 sign in</div>
+              <div class="meta">
+                <a>part 3</a>
+              </div>
+              <div class="description">
+                Sign in via google and github using Spring security oauth2
+                client support.
+              </div>
+            </div>
+            <div class="center aligned extra content">
+              <span>
+                <i class="photo video icon"></i>
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </body>
