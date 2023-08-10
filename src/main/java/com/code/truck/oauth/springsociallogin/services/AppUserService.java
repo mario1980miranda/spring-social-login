@@ -90,12 +90,14 @@ public class AppUserService implements UserDetailsService {
                 .builder()
                 .username("bob")
                 .password(passwordEncoder.encode("1234"))
+                .imageUrl("img")
                 .authorities(List.of(new SimpleGrantedAuthority("read")))
                 .build();
         var bil = AppUser
                 .builder()
                 .username("bil")
                 .password(passwordEncoder.encode("321"))
+                .imageUrl("img")
                 .authorities(List.of(new SimpleGrantedAuthority("read")))
                 .build();
 

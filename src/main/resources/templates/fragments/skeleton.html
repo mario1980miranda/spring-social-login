@@ -16,7 +16,7 @@
   <body>
     <div class="ui container">
       <!-- TOP MENU -->
-      <div data-th-replace="~{fragments/menu::top_menu}"></div>
+      <div data-th-replace="~{fragments/menu::top_menu(${activeMenu})}"></div>
       <!-- CONTENT -->
       <div data-th-insert="${content}"></div>
     </div>

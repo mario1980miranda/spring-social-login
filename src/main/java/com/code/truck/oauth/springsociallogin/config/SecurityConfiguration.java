@@ -9,6 +9,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
@@ -27,6 +28,18 @@ import com.code.truck.oauth.springsociallogin.services.AppUserService;
 public class SecurityConfiguration {
 
     @Bean
+    @Order(0)
+    SecurityFilterChain resources(HttpSecurity http) throws Exception {
+        return http
+                .securityMatcher("/images/**", "/**.css", "/**.js")
+                .authorizeHttpRequests(c -> c.anyRequest().permitAll())
+                .securityContext(AbstractHttpConfigurer::disable)
+                .sessionManagement(AbstractHttpConfigurer::disable)
+                .requestCache(AbstractHttpConfigurer::disable)
+                .build();
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc,
             AppUserService appUserService) throws Exception {
         return http
@@ -35,8 +48,6 @@ public class SecurityConfiguration {
                         ui -> ui.userService(appUserService.oauth2LoginHandler())
                                 .oidcUserService(appUserService.oidcLoginHandler())))
                 .authorizeHttpRequests(c -> c
-                        .requestMatchers(mvc.pattern("/images/**"), mvc.pattern("/**.css"), mvc.pattern("/**.js"))
-                        .permitAll()
                         .requestMatchers(mvc.pattern("/"), mvc.pattern("/login"), mvc.pattern("/user/sign-up"),
                                 mvc.pattern("/error"))
                         .permitAll()

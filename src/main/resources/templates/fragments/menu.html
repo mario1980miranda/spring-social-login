@@ -1,4 +1,4 @@
-<div class="ui padded basic segment" data-th-fragment="top_menu">
+<div class="ui padded basic segment" data-th-fragment="top_menu(activeMenu)">
   <div class="ui large secondary pointing menu">
     <a
       class="item"
@@ -34,7 +34,7 @@
       >
       <form id="logout_form" data-th-action="@{/logout}" method="post"></form>
       <a
-        class="ui secondary basic button"
+        class="ui secondary basic disabled button"
         data-sec-authorize="!isAuthenticated()"
         data-th-href="@{/user/sign-up}"
         >Sign up</a
