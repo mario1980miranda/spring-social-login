@@ -5,13 +5,18 @@
   data-th-replace="~{fragments/skeleton::layout('home',~{::#home_content})}"
 >
   <head>
-    <meta />
+    <meta charset="UTF-8" />
     <title>Welcome</title>
   </head>
   <body>
     <div id="home_content">
       <div class="ui padded segment">
         <h2 class="ui dividing header">How to build this app</h2>
+
+        <div class="ui message" data-th-if="${param.logout}">
+          <p>You have successfully logged out!</p>
+        </div>
+
         <div class="ui link cards">
           <div class="card">
             <div class="image">

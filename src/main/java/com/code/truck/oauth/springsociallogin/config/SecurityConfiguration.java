@@ -9,6 +9,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +25,7 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 import com.code.truck.oauth.springsociallogin.services.AppUserService;
 
 @Configuration
+@EnableWebSecurity
 @Log4j2
 public class SecurityConfiguration {
 
@@ -47,9 +49,12 @@ public class SecurityConfiguration {
                         .loginPage("/login")
                         .loginProcessingUrl("/authenticate")
                         .usernameParameter("user")
-                        .passwordParameter("pass"))
+                        .passwordParameter("pass")
+                        .defaultSuccessUrl("/user"))
+                .logout(c -> c.logoutSuccessUrl("/?logout"))
                 .oauth2Login(oc -> oc
                         .loginPage("/login")
+                        .defaultSuccessUrl("/user")
                         .userInfoEndpoint(
                                 ui -> ui.userService(appUserService.oauth2LoginHandler())
                                         .oidcUserService(appUserService.oidcLoginHandler())))
