@@ -43,10 +43,16 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc,
             AppUserService appUserService) throws Exception {
         return http
-                .formLogin(Customizer.withDefaults())
-                .oauth2Login(oc -> oc.userInfoEndpoint(
-                        ui -> ui.userService(appUserService.oauth2LoginHandler())
-                                .oidcUserService(appUserService.oidcLoginHandler())))
+                .formLogin(c -> c
+                        .loginPage("/login")
+                        .loginProcessingUrl("/authenticate")
+                        .usernameParameter("user")
+                        .passwordParameter("pass"))
+                .oauth2Login(oc -> oc
+                        .loginPage("/login")
+                        .userInfoEndpoint(
+                                ui -> ui.userService(appUserService.oauth2LoginHandler())
+                                        .oidcUserService(appUserService.oidcLoginHandler())))
                 .authorizeHttpRequests(c -> c
                         .requestMatchers(mvc.pattern("/"), mvc.pattern("/login"), mvc.pattern("/user/sign-up"),
                                 mvc.pattern("/error"))
