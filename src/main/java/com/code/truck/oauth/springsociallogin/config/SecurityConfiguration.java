@@ -55,11 +55,14 @@ public class SecurityConfiguration {
                 .oauth2Login(oc -> oc
                         .loginPage("/login")
                         .defaultSuccessUrl("/user")
-                        .userInfoEndpoint(
-                                ui -> ui.userService(appUserService.oauth2LoginHandler())
-                                        .oidcUserService(appUserService.oidcLoginHandler())))
+                        .userInfoEndpoint(ui -> ui
+                                .userService(appUserService.oauth2LoginHandler())
+                                .oidcUserService(appUserService.oidcLoginHandler())))
                 .authorizeHttpRequests(c -> c
-                        .requestMatchers(mvc.pattern("/"), mvc.pattern("/login"), mvc.pattern("/user/sign-up"),
+                        .requestMatchers(
+                                mvc.pattern("/"),
+                                mvc.pattern("/login"),
+                                mvc.pattern("/user/sign-up"),
                                 mvc.pattern("/error"))
                         .permitAll()
                         .anyRequest().authenticated())

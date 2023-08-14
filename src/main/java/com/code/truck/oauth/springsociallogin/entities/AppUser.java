@@ -31,6 +31,12 @@ public class AppUser implements UserDetails, OidcUser {
     Map<String, Object> attributes;
     Collection<? extends GrantedAuthority> authorities;
 
+    public String getImageUrl() {
+        if (provider.equals(LoginProvider.AZURE))
+            return null;
+        return imageUrl;
+    }
+
     @Override
     public Map<String, Object> getAttributes() {
         return attributes;
