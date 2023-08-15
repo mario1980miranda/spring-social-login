@@ -33,11 +33,11 @@ public class SecurityConfiguration {
     @Order(0)
     SecurityFilterChain resources(HttpSecurity http) throws Exception {
         return http
-                .securityMatcher("/images/**", "/**.css", "/**.js", "/favicon.ico")
+                .securityMatcher("/images/**", "/**.css", "/**.js")
                 .authorizeHttpRequests(c -> c.anyRequest().permitAll())
-                .securityContext(AbstractHttpConfigurer::disable)
-                .sessionManagement(AbstractHttpConfigurer::disable)
-                .requestCache(AbstractHttpConfigurer::disable)
+                .securityContext(c -> c.disable())
+                .sessionManagement(c -> c.disable())
+                .requestCache(c -> c.disable())
                 .build();
     }
 
@@ -51,6 +51,7 @@ public class SecurityConfiguration {
                         .usernameParameter("user")
                         .passwordParameter("pass")
                         .defaultSuccessUrl("/user"))
+                .requestCache(c -> c.disable())
                 .logout(c -> c.logoutSuccessUrl("/?logout"))
                 .oauth2Login(oc -> oc
                         .loginPage("/login")

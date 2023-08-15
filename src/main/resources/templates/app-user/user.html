@@ -11,14 +11,27 @@
     <div class="ui grid segment" id="user_segment">
       <div class="four wide left attached column">
         <div class="ui vertical fluid tabular menu">
-          <a class="active item" data-tab="user"> Info </a>
-          <a class="item" data-tab="change_password"> Password </a>
+          <a
+            class="item"
+            data-tab="user"
+            data-th-classappend="${(tab eq 'user') ? 'active' : ''}"
+          >
+            Info
+          </a>
+          <a
+            class="item"
+            data-tab="change_password"
+            data-th-classappend="${(tab eq 'pass') ? 'active' : ''}"
+          >
+            Password
+          </a>
         </div>
       </div>
       <div class="twelve wide stretched right attached column">
         <div
-          class="ui seamless right attached active tab segment"
+          class="ui seamless right attached tab segment"
           data-tab="user"
+          data-th-classappend="${(tab eq 'user') ? 'active' : ''}"
         >
           <div class="ui card">
             <div class="image">
@@ -45,10 +58,16 @@
         <div
           class="ui seamless right attached tab segment"
           data-tab="change_password"
+          data-th-classappend="${(tab eq 'user') ? 'active' : ''}"
         >
           <div class="ui inverted segment">
             <h4 class="">Change password</h4>
-            <form class="ui inverted form" id="change_password_form">
+            <form
+              class="ui inverted form"
+              id="change_password_form"
+              method="post"
+              data-th-action="@{/user/password}"
+            >
               <div class="field">
                 <label>Password</label>
                 <input

@@ -37,6 +37,15 @@ public class AppUserController {
         return "app-user/user";
     }
 
+    @PostMapping("/password")
+    public String changePassword(RedirectAttributes attributes) {
+
+        attributes.addFlashAttribute("tab", "pass");
+        attributes.addFlashAttribute("toast", Toast.success("Password", "Change password"));
+
+        return "redirect:/user";
+    }
+
     record SignUpForm(
             @NotBlank String username,
             @Size(min = 4, message = "password must have a minimum of {min} characters") String password) {
@@ -57,8 +66,20 @@ public class AppUserController {
             return "app-user/signup";
         }
 
-        attributes.addFlashAttribute("toast", Toast.success("User sign up", "success"));
+        try {
+            appUserService.createUser(signUpForm.username, signUpForm.password);
 
-        return "redirect:/user/signup";
+            attributes.addFlashAttribute("toast",
+                    Toast.success("User sign up", "User " + signUpForm.username + " was created."));
+
+            return "redirect:/login";
+
+        } catch (Exception e) {
+
+            attributes.addFlashAttribute("toast",
+                    Toast.error("User sign up", e.getMessage()));
+
+            return "redirect:/user/signup";
+        }
     }
 }
