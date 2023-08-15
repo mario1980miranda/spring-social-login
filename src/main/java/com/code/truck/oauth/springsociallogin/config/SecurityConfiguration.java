@@ -33,7 +33,7 @@ public class SecurityConfiguration {
     @Order(0)
     SecurityFilterChain resources(HttpSecurity http) throws Exception {
         return http
-                .securityMatcher("/images/**", "/**.css", "/**.js")
+                .securityMatcher("/images/**", "/**.css", "/**.js", "/favicon.ico")
                 .authorizeHttpRequests(c -> c.anyRequest().permitAll())
                 .securityContext(AbstractHttpConfigurer::disable)
                 .sessionManagement(AbstractHttpConfigurer::disable)
@@ -62,7 +62,7 @@ public class SecurityConfiguration {
                         .requestMatchers(
                                 mvc.pattern("/"),
                                 mvc.pattern("/login"),
-                                mvc.pattern("/user/sign-up"),
+                                mvc.pattern("/user/signup"),
                                 mvc.pattern("/error"))
                         .permitAll()
                         .anyRequest().authenticated())

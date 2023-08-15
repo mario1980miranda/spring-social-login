@@ -19,6 +19,14 @@
       <div data-th-replace="~{fragments/menu::top_menu(${activeMenu})}"></div>
       <!-- CONTENT -->
       <div data-th-insert="${content}"></div>
+
+      <script data-th-if="${toast}" data-th-inline="javascript">
+        $.toast({
+          title: /*[[${toast.title}]]*/ "",
+          message: /*[[${toast.message}]]*/ "",
+          class: /*[[${toast.clazz}]]*/ "",
+        });
+      </script>
     </div>
   </body>
 </html>
