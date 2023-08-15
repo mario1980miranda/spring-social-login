@@ -51,7 +51,7 @@ public class SecurityConfiguration {
                         .usernameParameter("user")
                         .passwordParameter("pass")
                         .defaultSuccessUrl("/user"))
-                .requestCache(c -> c.disable())
+                // .requestCache(c -> c.disable())
                 .logout(c -> c.logoutSuccessUrl("/?logout"))
                 .oauth2Login(oc -> oc
                         .loginPage("/login")

@@ -1,10 +1,14 @@
 package com.code.truck.oauth.springsociallogin.controllers;
 
+import java.util.Objects;
+
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -14,6 +18,7 @@ import com.code.truck.oauth.springsociallogin.fomanticUI.Toast;
 import com.code.truck.oauth.springsociallogin.services.AppUserService;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Value;
@@ -32,18 +37,44 @@ public class AppUserController {
         return appUser;
     }
 
+    record ChangePasswordForm(
+            @NotBlank String oldPassword,
+            @NotBlank String password,
+            @NotBlank String passwordConfirm) {
+        @AssertTrue(message = "passwords should match")
+        public boolean isSamePassword() {
+            return Objects.nonNull(password)
+                    &&
+                    Objects.nonNull(passwordConfirm)
+                    &&
+                    password.equals(passwordConfirm);
+        }
+    }
+
     @GetMapping
-    public String showUserInfo() {
+    public String showUserInfo(@ModelAttribute ChangePasswordForm changePasswordForm) {
         return "app-user/user";
     }
 
-    @PostMapping("/password")
-    public String changePassword(RedirectAttributes attributes) {
+    @PatchMapping("/password")
+    public String changePassword(@Valid ChangePasswordForm changePasswordForm, Errors errors,
+            RedirectAttributes attributes, Model model) {
 
-        attributes.addFlashAttribute("tab", "pass");
-        attributes.addFlashAttribute("toast", Toast.success("Password", "Change password"));
+        if (errors.hasErrors()) {
+            model.addAttribute("tab", "pass");
+            return "app-user/user";
+        }
 
-        return "redirect:/user";
+        try {
+            appUserService.changePassword(changePasswordForm.oldPassword, changePasswordForm.password);
+            attributes.addFlashAttribute("toast", Toast.success("Password", "Password was changed!"));
+            return "redirect:/user";
+        } catch (Exception e) {
+            attributes.addFlashAttribute("tab", "pass");
+            attributes.addFlashAttribute("toast", Toast.error("Password", e.getMessage()));
+            return "redirect:/user";
+        }
+
     }
 
     record SignUpForm(
