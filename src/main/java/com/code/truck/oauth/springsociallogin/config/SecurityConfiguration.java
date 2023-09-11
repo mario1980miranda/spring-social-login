@@ -1,33 +1,36 @@
 package com.code.truck.oauth.springsociallogin.config;
 
-import lombok.extern.log4j.Log4j2;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 import com.code.truck.oauth.springsociallogin.services.AppUserService;
+
+import lombok.extern.log4j.Log4j2;
 
 @Configuration
 @EnableWebSecurity
 @Log4j2
 public class SecurityConfiguration {
+
+    private static final RequestMatcher PROTECTECTED_URLS = new OrRequestMatcher(
+            new AntPathRequestMatcher("/"),
+            new AntPathRequestMatcher("/login"),
+            new AntPathRequestMatcher("/user/signup"),
+            new AntPathRequestMatcher("/error"));
 
     @Bean
     @Order(0)
@@ -42,7 +45,7 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc,
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, /* MvcRequestMatcher.Builder mvc, */
             AppUserService appUserService) throws Exception {
         return http
                 .formLogin(c -> c
@@ -60,11 +63,14 @@ public class SecurityConfiguration {
                                 .userService(appUserService.oauth2LoginHandler())
                                 .oidcUserService(appUserService.oidcLoginHandler())))
                 .authorizeHttpRequests(c -> c
-                        .requestMatchers(
-                                mvc.pattern("/"),
-                                mvc.pattern("/login"),
-                                mvc.pattern("/user/signup"),
-                                mvc.pattern("/error"))
+                        .requestMatchers(PROTECTECTED_URLS
+                        /*
+                         * mvc.pattern("/"),
+                         * mvc.pattern("/login"),
+                         * mvc.pattern("/user/signup"),
+                         * mvc.pattern("/error")
+                         */
+                        )
                         .permitAll()
                         .anyRequest().authenticated())
                 .build();
